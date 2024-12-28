@@ -1,0 +1,478 @@
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard {
+  background-color: #e6e7ee;
+  /* margin: 10px; */
+  padding: 10px;
+  display: flex;
+  align-items: flex-start;
+  /* min-height: 100vh; */
+}
+
+/* .logo {
+  font-size: 24px;
+  font-weight: bold;
+} */
+
+.content-section {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.upload-section {
+  width: 100%;
+  padding: 10px;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  /* box-shadow: 0 2px rgba(0, 0, 0, 0.1); */
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+h3{
+  font-size: large;
+}
+
+.upload-section h3 {
+  font-size: large;
+  margin: 0;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-btn {
+  font-size: medium;
+  padding: 5px 10px;
+  background: linear-gradient(90deg, rgb(29, 169, 230) 0%, rgb(105, 102, 254) 82%);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.upload-btn svg {
+  margin-right: 10px;
+}
+
+.file-name {
+  display: block;
+  /* margin-top: 10px; */
+  /* font-weight: bold; */
+}
+
+.results-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.result-card {
+  padding: 10px;
+  padding-bottom: 30px;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  box-shadow: 0 1px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  cursor: pointer;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+}
+
+.result-card.expanded, .result-card.collapsed {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.result-card.hidden {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  max-height: 50px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.result-card.expanded {
+  cursor: default;
+}
+
+.result-card.collapsed {
+  cursor: pointer;
+}
+
+.result-card-header {
+  display: flex;
+  justify-content: space-between;
+  /* margin-bottom: 10px; */
+  /* font-weight: bold; */
+  width: 100%;
+}
+
+
+.result-card.collapsed .result-card-header {
+  border-bottom: 1px solid #eceff4;
+}
+
+
+.result-card-filename {
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.combined-score {
+  /* font-size: 1em; */
+  margin-left: auto;
+}
+
+.sidebar-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-section {
+  padding: 20px;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  background-color: #fff;
+  /* box-shadow: 0 1px rgba(0, 0, 0, 0.1); */
+  margin-bottom: 20px;
+}
+
+.tips-section {
+  padding: 20px;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  background-color: #fff;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+}
+
+.combined-score-section {
+  text-align: center;
+}
+
+.combined-score {
+  margin-bottom: 20px;
+}
+
+
+.scores-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  flex: 0.5;
+  justify-items: center;
+}
+
+.scores-container.highlighted .scores-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.scores-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s ease;
+}
+
+.scores-container.highlighted {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.scores-container .score-circle {
+  margin: 10px;
+  transition: all 0.6s ease;
+}
+
+.scores-container.highlighted .score-circle {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 30px;
+}
+
+.scores-container.highlighted .score-circle p {
+  font-size: 10px;
+  white-space: nowrap;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.scores-container.highlighted .score-circle.highlight {
+  /* transform: scale(1.3); */
+  height: 70px;
+  width: 100px;
+}
+
+.score-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align items horizontally */
+  justify-content: center; /* Center align items vertically */
+  position: relative;
+  width: 100px;
+  height: 100px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  text-align: center; /* Center align text */
+}
+
+.circle-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.score-circle.flipped .circle-container {
+  transform: rotateY(180deg);
+}
+
+.circle-front, .circle-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.circle-front {
+  transform: rotateY(0deg);
+}
+
+.circle-back {
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+}
+
+.circular-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.percentage {
+  font-size: 7px;
+  text-anchor: middle;
+  fill: #000;
+}
+
+.Theback {
+  display: flex;
+  width: 100%;
+  max-width: 1500px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  transform: rotateY(180deg);
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: 20px; */
+}
+
+.bell-curve-chart-container {
+  width: 100%; /* or any desired width */
+  max-width: 500px; /* limit the maximum width */
+  margin: 0 auto; /* center the chart */
+}
+
+.bell-curve-chart-container canvas {
+  width: 100%;
+  height: 200px; /* Set the desired height */
+}
+
+/* Existing styles */
+
+.expanded-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.scores-container {
+  flex: 1;
+}
+
+.dynamic-text-area {
+  flex: 8;
+  padding-left: 20px;
+  border-left: 1px solid #eceff4;
+}
+
+
+.tips-header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eceff4;
+}
+
+/* Existing styles... */
+
+.no-uploads-message {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
+
+.instructions {
+  /* margin-top: 10px; */
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Add other existing styles here */
+
+
+.tips-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.tips-list li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: small;
+  
+}
+
+.tips-list li svg {
+  margin-right: 15px;
+  font-size: 1.5em; /* Adjust the size of the icons */
+  color: #007bff;
+}
+
+
+#chartjs-tooltip {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  transform: translate(-50%, 0);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+#chartjs-tooltip table {
+  margin: 0;
+  background: rgba(255, 255, 255, 0.9);
+  border-collapse: collapse;
+  border: 0;
+}
+
+#chartjs-tooltip td, #chartjs-tooltip th {
+  padding: 8px;
+  font-size: 12px;
+  color: #333;
+}
+
+#chartjs-tooltip .chartjs-tooltip-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  border-radius: 50%;
+}
+
+/* Add these styles at the end of your existing Dashboard.css */
+/* Add styles for ExpandedResult components */
+.expanded-result {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.transcript-section, .key-areas-improvement, .tips-section {
+  margin-top: 20px;
+}
+
+.tips-header {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.tips-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.tips-list li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.tips-list li svg {
+  margin-right: 10px;
+  color:#007bff;
+}
+
+.view-details-btn {
+  grid-column: span 2;
+  /* background-color: #007bff; */
+  color: white;
+  border: none;
+  padding: 5px 20px;
+  background: linear-gradient(90deg, rgb(29, 169, 230) 0%, rgb(105, 102, 254) 82%);
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.result-card.collapsed.active {
+  border: 1px solid #007bff; /* Blue border for active collapsed card */
+}
+
+
+.view-details-btn:hover {
+  background-color: #0056b3;
+}
+
+.result-card.collapsed.active {
+  border: 1px solid #007bff; /* Blue border for active collapsed card */
+}
+
+.result-card:hover{
+  border: 1px solid #007bff39;
+}
